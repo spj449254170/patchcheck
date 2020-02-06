@@ -18,30 +18,33 @@ import java.sql.Date;
 public class patchLog {
     @Id
     @GeneratedValue
-    private String id;
-    private String patchid;
+    private Integer id;
+    //补丁id
+    private Integer patchid;
     @CreationTimestamp
     private Date createtime;
-    private String userid;
+    //用户id
+    private Integer userid;
+    //操作说明
     private String updateinfo;
 
     public patchLog(){
 
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getPatchid() {
+    public Integer getPatchid() {
         return patchid;
     }
 
-    public void setPatchid(String patchid) {
+    public void setPatchid(Integer patchid) {
         this.patchid = patchid;
     }
 
@@ -53,11 +56,11 @@ public class patchLog {
         this.createtime = createtime;
     }
 
-    public String getUserid() {
+    public Integer getUserid() {
         return userid;
     }
 
-    public void setUserid(String userid) {
+    public void setUserid(Integer userid) {
         this.userid = userid;
     }
 

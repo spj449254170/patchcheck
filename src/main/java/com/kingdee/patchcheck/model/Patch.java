@@ -1,8 +1,10 @@
 package com.kingdee.patchcheck.model;
 
+import io.swagger.models.auth.In;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.sql.Date;
 
@@ -14,12 +16,13 @@ import java.sql.Date;
  * 补丁模型
  */
 @Entity
-public class patch {
+public class Patch {
     @Id
+    @GeneratedValue
     //编号
-    private String id;
+    private Integer id;
     //提交人
-    private String commitman;
+    private Integer commitman;
     @CreationTimestamp
     //提交时间
     private Date createtime;
@@ -29,24 +32,39 @@ public class patch {
     private String name;
     //补丁说明
     private String remarks;
+    //补丁路径
+    private Integer realUrl;
+    //所属项目
+    private Integer itemid;
 
-    public patch(){
+
+    public Integer getItemid() {
+        return itemid;
+    }
+
+
+
+    public void setItemid(Integer itemid) {
+        this.itemid = itemid;
+    }
+
+    public Patch(){
 
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getCommitman() {
+    public Integer getCommitman() {
         return commitman;
     }
 
-    public void setCommitman(String commitman) {
+    public void setCommitman(Integer commitman) {
         this.commitman = commitman;
     }
 
@@ -80,5 +98,13 @@ public class patch {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public Integer getRealUrl() {
+        return realUrl;
+    }
+
+    public void setRealUrl(Integer realUrl) {
+        this.realUrl = realUrl;
     }
 }

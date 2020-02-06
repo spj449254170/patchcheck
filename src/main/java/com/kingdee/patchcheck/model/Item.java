@@ -2,63 +2,48 @@ package com.kingdee.patchcheck.model;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.sql.Date;
 
 /**
- * description: patchEntry <br>
- * date: 2020\1\7 0007 18:44 <br>
+ * description: item <br>
+ * date: 2020\1\7 0007 17:29 <br>
  * author: Administrator <br>
  * version: 1.0 <br>
- * 补丁详细模型
+ * 项目模型
  */
 @Entity
-public class patchEntry {
+public class Item {
     @Id
     @GeneratedValue
-    private String id;
-    //补丁id
-    private String patchid;
-    //补丁类型
-    private String type;
-    //是否通过校验
-    private Boolean ischeck;
-    //名称
+    private Integer id;
+    //项目编号
     private String name;
-    //说明
+    //项目描述
     private String remarks;
     @CreationTimestamp
-    //创建时间
+    //创建时间，也是项目开始时间
     private Date createtime;
+    //项目结束时间
+    private Date endtime;
+    //是否关闭
+    private Boolean closetype;
+    //创建人id
+    private Integer userid;
 
-    public patchEntry(){
+    public Item(){
 
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Boolean getIscheck() {
-        return ischeck;
-    }
-
-    public void setIscheck(Boolean ischeck) {
-        this.ischeck = ischeck;
     }
 
     public String getName() {
@@ -83,5 +68,29 @@ public class patchEntry {
 
     public void setCreatetime(Date createtime) {
         this.createtime = createtime;
+    }
+
+    public Date getEndtime() {
+        return endtime;
+    }
+
+    public void setEndtime(Date endtime) {
+        this.endtime = endtime;
+    }
+
+    public Boolean getClosetype() {
+        return closetype;
+    }
+
+    public void setClosetype(Boolean closetype) {
+        this.closetype = closetype;
+    }
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
     }
 }

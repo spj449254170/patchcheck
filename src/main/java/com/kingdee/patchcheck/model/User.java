@@ -1,5 +1,6 @@
 package com.kingdee.patchcheck.model;
 
+
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
@@ -10,40 +11,33 @@ import java.sql.Date;
 
 @Entity
 
-public class user {
+public class User {
     @Id
     @GeneratedValue
-    @Column(columnDefinition = "COMMENT'id'")
-    private String id;
+    private Integer id;
     //名称
-    @Column(columnDefinition = "COMMENT'用户名也是登录账号'")
     private String name;
     //密码
-    @Column(columnDefinition = "COMMENT'密码'")
     private String password;
-    //权限
-    @Column(columnDefinition = "COMMENT'权限'")
+    //权限id
     private Integer power;
-    //部门
-    @Column(columnDefinition = "COMMENT'所属部门'")
-    private String department;
+    //部门id
+    private Integer department;
     //创建时间
-    @Column(columnDefinition = "COMMENT'创建时间'")
     @CreationTimestamp
     private Date createTime;
     //手机号
-    @Column(columnDefinition = "COMMENT'手机号'")
-    private Integer phone;
+    private String phone;
 
-    public user(){
+    public User(){
 
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -71,11 +65,11 @@ public class user {
         this.power = power;
     }
 
-    public String getDepartment() {
+    public Integer getDepartment() {
         return department;
     }
 
-    public void setDepartment(String department) {
+    public void setDepartment(Integer department) {
         this.department = department;
     }
 
@@ -87,11 +81,24 @@ public class user {
         this.createTime = createTime;
     }
 
-    public Integer getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(Integer phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public String toString() {
+        return "user{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", power=" + power +
+                ", department='" + department + '\'' +
+                ", createTime=" + createTime +
+                ", phone=" + phone +
+                '}';
     }
 }
