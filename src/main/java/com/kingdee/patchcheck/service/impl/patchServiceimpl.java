@@ -66,8 +66,10 @@ public class patchServiceimpl implements IpatchService {
             patchVO.setName(patch.getName());
             patchVO.setRemarks(patch.getRemarks());
             patchVO.setIshaszip(StringUtils.isEmpty(patch.getRealUrl()) ? "没有生成压缩包" : "已有压缩包");
-            Optional<Filemas> filemas = filemsgRepository.findById(patch.getRealUrl());
-            patchVO.setUrl(filemas.get().getUrl());
+            if(!StringUtils.isEmpty(patch.getRealUrl())){
+                Optional<Filemas> filemas = filemsgRepository.findById(patch.getRealUrl());
+                patchVO.setUrl(filemas.get().getUrl());
+            }
             Optional<User> optionalUser = userRepository.findById(patch.getCommitman());
             patchVO.setUsername(optionalUser.get().getName());
             patchVOList.add(patchVO);
@@ -98,7 +100,7 @@ public class patchServiceimpl implements IpatchService {
 
     @Override
     public Boolean createpatch(Integer patchid, User user) {
-        /*TODO 1.获取所有的这个补丁校验通过，没有删除的组件
+        /*1.获取所有的这个补丁校验通过，没有删除的组件
         2.将这些组件放到一个文件夹中
         3.在这个文件夹中添加部署说明
         4.添加补丁说明文件
@@ -188,6 +190,12 @@ public class patchServiceimpl implements IpatchService {
     public String downloadpatch(User user, Integer patchid, HttpServletResponse response) throws IOException {
         Optional<Patch> patch = patchRepository.findById(patchid);
         Optional<Filemas> optionalFilemas = filemsgRepository.findById(patch.get().getRealUrl());
+        //增加日志
+        patchLog patchLog = new patchLog();
+        patchLog.setPatchid(patch.get().getId());
+        patchLog.setUserid(user.getId());
+        patchLog.setUpdateinfo(user.getName() + "下载了这个补丁");
+        patchLogRepository.save(patchLog);
         return optionalFilemas.get().getUrl();
     }
 
