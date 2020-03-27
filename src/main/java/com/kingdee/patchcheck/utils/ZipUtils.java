@@ -1,12 +1,10 @@
 package com.kingdee.patchcheck.utils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.List;
+import java.util.zip.InflaterInputStream;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -41,6 +39,9 @@ public class ZipUtils {
             zos = new ZipOutputStream(out);
             File sourceFile = new File(srcDir);
             compress(sourceFile, zos, sourceFile.getName(), KeepDirStructure);
+            File file = new File(sourceFile.getName());
+            FileInputStream in = new FileInputStream(file);
+            ZipInputStream zipInputStream = new ZipInputStream(in);
             long end = System.currentTimeMillis();
             System.out.println("压缩完成，耗时：" + (end - start) + " ms");
         } catch (Exception e) {
@@ -56,6 +57,31 @@ public class ZipUtils {
         }
     }
 
+    /**
+     * 获取zip流： 方法1
+     *
+     * @param srcDir           压缩文件夹路径
+     *
+     *                         false:所有文件跑到压缩包根目录下(注意：不保留目录结构可能会出现同名文件,会压缩失败)
+     *
+     * @throws RuntimeException 压缩失败会抛出运行时异常
+     *
+     */
+
+    public static void getZip(String srcDir) throws RuntimeException {
+
+        long start = System.currentTimeMillis();
+
+        try {
+            File file = new File(srcDir);
+            FileInputStream in = new FileInputStream(file);
+            ZipInputStream zipInputStream = new ZipInputStream(in);
+            long end = System.currentTimeMillis();
+            System.out.println("压缩完成，耗时：" + (end - start) + " ms");
+        } catch (Exception e) {
+            throw new RuntimeException("zip error from ZipUtils", e);
+        }
+    }
     /**
      * 压缩成ZIP 方法2
      *
@@ -119,6 +145,7 @@ public class ZipUtils {
             while ((len = in.read(buf)) != -1) {
                 zos.write(buf, 0, len);
             }
+
             // Complete the entry
             zos.closeEntry();
             in.close();

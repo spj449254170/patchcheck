@@ -5,8 +5,11 @@ import com.kingdee.patchcheck.model.Result;
 import com.kingdee.patchcheck.model.User;
 import com.kingdee.patchcheck.service.IfileService;
 import com.kingdee.patchcheck.service.IitemService;
+import com.kingdee.patchcheck.utils.CheckUtil;
 import com.kingdee.patchcheck.utils.ResultUtil;
 import io.swagger.annotations.Api;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
@@ -22,7 +25,7 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * description: user <br>
+ * description: fileController <br>
  * date: 2020\1\8 0008 12:01 <br>
  * author: Administrator <br>
  * version: 1.0 <br>
@@ -33,29 +36,29 @@ import java.util.Map;
 @RequestMapping("/file")
 @Api(value = "测试swagger", description = "测试swagger api")
 public class fileController {
+    Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private IfileService ifileService;
+    //文件下载
     @PostMapping(value = "/fileUpload")
     public Result<Boolean> fileUpload(MultipartFile file,@RequestParam("name") String name,@RequestParam("id") Integer pacthid,@RequestParam("type") Integer type,@RequestParam("remarks") String remarks,@RequestParam("delivery")boolean istion,HttpServletResponse response, HttpServletRequest request){
-        if (!checklogin(response, request)) {
+        logger.info("fileController的fileUpload方法，参数为 file:{},name:{},id:{},type:{},remarks:{},delivery:{},response:{},request:{}",file.toString(),name,pacthid,type,remarks,istion,response.toString(),request.toString());
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }
         User users = (User) request.getSession().getAttribute("users");
         if(istion){
-            return ResultUtil.success(ifileService.fileUpload(file,name,pacthid,type,remarks,users,true));
+            Result result= ResultUtil.success(ifileService.fileUpload(file,name,pacthid,type,remarks,users,true));
+            logger.info("fileController类fileUpload方法，返回信息{}",result);
+            return result;
         }else{
-            return ResultUtil.success(ifileService.fileUpload(file,name,pacthid,type,remarks,users,false));
+            Result result= ResultUtil.success(ifileService.fileUpload(file,name,pacthid,type,remarks,users,false));
+            logger.info("fileController类fileUpload方法，返回信息{}",result);
+            return result;
         }
 
     }
 
-    public static Boolean checklogin(HttpServletResponse response, HttpServletRequest request) {
-        User users = (User) request.getSession().getAttribute("users");
-        if (StringUtils.isEmpty(users)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
+
 
 }

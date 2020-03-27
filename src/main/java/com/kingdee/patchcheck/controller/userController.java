@@ -4,6 +4,7 @@ import com.kingdee.patchcheck.VO.UserVO;
 import com.kingdee.patchcheck.model.Result;
 import com.kingdee.patchcheck.model.User;
 import com.kingdee.patchcheck.service.IuserService;
+import com.kingdee.patchcheck.utils.CheckUtil;
 import com.kingdee.patchcheck.utils.ResultUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -50,7 +52,7 @@ public class userController {
     //分页获取用户数据
     @GetMapping(value = "/getuser/{page}/{size}")
     public Result<User> admin(@PathVariable("page") int page, @PathVariable("size") int size, HttpServletResponse response, HttpServletRequest request) {
-        if (!checklogin(response, request)) {
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }
         page = page-1;
@@ -62,7 +64,7 @@ public class userController {
     @PostMapping(value = "/adduser")
     public Result adduser(User user, HttpServletResponse response, HttpServletRequest request) {
         System.out.println(user.toString());
-        if (!checklogin(response, request)) {
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }
         return ResultUtil.success(userservice.addyuser(user));
@@ -73,7 +75,7 @@ public class userController {
     @PostMapping(value = "/updateuser")
     public Result updateuser(User user, HttpServletResponse response, HttpServletRequest request) {
         System.out.println(user.toString());
-        if (!checklogin(response, request)) {
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }
         return ResultUtil.success(userservice.updateuser(user));
@@ -84,7 +86,7 @@ public class userController {
     //删除用户
     @GetMapping(value = "/deleteuser/{id}")
     public Result<User> deleteuser(@PathVariable("id") Integer id, HttpServletResponse response, HttpServletRequest request) {
-        if (!checklogin(response, request)) {
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }
         return ResultUtil.success(userservice.deleteuser(id));
@@ -95,16 +97,16 @@ public class userController {
     @GetMapping(value = "/getuser")
     public Result<User> getuser(HttpServletResponse response, HttpServletRequest request) {
         System.out.println(((User) request.getSession().getAttribute("users")).toString());
-        if (!checklogin(response, request)) {
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         } else {
-            return ResultUtil.success(((User) request.getSession().getAttribute("users")).getName());
+            return ResultUtil.success(((User) request.getSession().getAttribute("users")));
         }
     }
     @GetMapping(value = "/getuserbyid/{id}")
     public Result<User> getuserbyid(@PathVariable("id")Integer id,HttpServletResponse response, HttpServletRequest request) {
         System.out.println(((User) request.getSession().getAttribute("users")).toString());
-        if (!checklogin(response, request)) {
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         } else {
 
@@ -114,7 +116,7 @@ public class userController {
     @GetMapping(value = "/getuserbyname")
     public Result<User> getuserbyname(@RequestParam("name") String name,HttpServletResponse response, HttpServletRequest request) {
         System.out.println(((User) request.getSession().getAttribute("users")).toString());
-        if (!checklogin(response, request)) {
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         } else {
 
@@ -122,13 +124,6 @@ public class userController {
         }
     }
 
-    public static Boolean checklogin(HttpServletResponse response, HttpServletRequest request) {
-        User users = (User) request.getSession().getAttribute("users");
-        if (StringUtils.isEmpty(users)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
+
 
 }

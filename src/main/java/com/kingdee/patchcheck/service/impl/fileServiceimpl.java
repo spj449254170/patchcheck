@@ -5,6 +5,8 @@ import com.kingdee.patchcheck.model.*;
 import com.kingdee.patchcheck.repository.*;
 import com.kingdee.patchcheck.service.IfileService;
 import com.kingdee.patchcheck.utils.FTPUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,12 +24,12 @@ import java.util.regex.Pattern;
  * date: 2020\1\8 0008 13:46 <br>
  * author: Administrator <br>
  * version: 1.0 <br>
- * TODO
+ * 文件处理实现类
  */
 @Service
 @Transactional
 public class fileServiceimpl implements IfileService {
-
+    Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private patchEntryRepository patchEntryRepository;
     @Autowired
@@ -38,11 +40,15 @@ public class fileServiceimpl implements IfileService {
     private patchRepository patchRepository;
     @Autowired
     private patchLogRepository patchLogRepository;
-
+    @Autowired
+    private FtpProperties ftpProperties;
 
     @Override
     public String fileUpload(MultipartFile file, String name, Integer pacthid,  Integer type, String remarks,User user,Boolean istoin){
+        logger.info("fileServiceimpl类的fileUpload方法，入参file：{}，name：{}，pacthid：{}，type：{}，remarks：{}，user：{}，istoin：{}",
+                file.toString(),name,pacthid,type,remarks,user.toString(),istoin);
         if(file.isEmpty()){
+            logger.error("fileServiceimpl类fileUpload方法，文件为空");
             return "false";
         }
         String fileName = file.getOriginalFilename();
@@ -57,7 +63,7 @@ public class fileServiceimpl implements IfileService {
         Pattern p = Pattern.compile(patchtype.get().getRuler());
         Matcher m = p.matcher(name);
         boolean isValid = m.matches();
-        String path = "F:/patchcheck/"+patch;
+        String path = ftpProperties.getFile()+patch;
         File dest = new File(path + "/" + uploadFileName);
         if(!dest.getParentFile().exists()){ //判断文件父目录是否存在
             dest.getParentFile().mkdirs();
@@ -98,15 +104,14 @@ public class fileServiceimpl implements IfileService {
             patchLog.setUserid(user.getId());
             patchLog.setUpdateinfo(user.getName() + "上传一个补丁组件文件，补丁组件名称：" +name+"补丁组件类型：" +fileExtensionName+"补丁组件存放路径"+dest.toString());
             patchLogRepository.save(patchLog);
+            logger.info("文件上传成功，返回值：",true);
             return "true";
 
         } catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("fileServiceimpl类的fileUpload方法，报错，报错信息为：",e.getMessage());
             return "false";
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("fileServiceimpl类的fileUpload方法，报错，报错信息为：",e.getMessage());
             return "false";
         }
     }

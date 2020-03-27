@@ -20,7 +20,7 @@ public interface IitemService {
     public Boolean additem(Item item,User user);
     public Boolean deleteitem(Integer id);
     public Optional<Item> getitembyid(Integer id);
-    public Page<Item> getuserbyname(String name);
+    public Page<Item> getitembyname(String name);
     public Page<User> getitemuserlist(Integer id);
     public Page<User> getusernoinitem(Integer id);
     public Boolean adduser(String user,Integer itemid);

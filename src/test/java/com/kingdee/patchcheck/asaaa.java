@@ -5,6 +5,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.kingdee.patchcheck.model.User;
 
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,19 +19,13 @@ import java.util.List;
  * TODO
  */
 public class asaaa {
-    public static void main(String[] args) {
-        List<List<String>> listOut = new ArrayList<>();
-        User[] users = new User[5];
-        User user1 =  new User();
-        user1.setName("1111");
-        user1.setId(6666);
-        users[0] = user1;
-        String jsonList = JSON.toJSONString(users);
-        System.out.println(jsonList);
-        JSONArray objects = JSON.parseArray(jsonList);
-        JSONObject JSONObject = (JSONObject)   objects.get(0);
+    public static void main(String[] args) throws SocketException, UnknownHostException {
 
-        System.out.println(JSONObject.get("id"));
 
+        System.out.println(getLocalIP());
+
+    }
+    public static String getLocalIP() throws UnknownHostException, SocketException {
+        return InetAddress.getLocalHost().getHostAddress();
     }
 }

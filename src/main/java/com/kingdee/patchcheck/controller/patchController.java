@@ -7,6 +7,7 @@ import com.kingdee.patchcheck.model.Result;
 import com.kingdee.patchcheck.model.User;
 import com.kingdee.patchcheck.service.IitemService;
 import com.kingdee.patchcheck.service.IpatchService;
+import com.kingdee.patchcheck.utils.CheckUtil;
 import com.kingdee.patchcheck.utils.ResultUtil;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class patchController {
     //分页获取补丁数据
     @GetMapping(value = "/getpatch/{page}/{size}/{itemid}")
     public Result<PatchVO> getpatch(@PathVariable("page") int page, @PathVariable("size") int size, @PathVariable("itemid") Integer itemid, HttpServletResponse response, HttpServletRequest request) {
-        if (!checklogin(response, request)) {
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }
         page = page-1;
@@ -50,7 +51,7 @@ public class patchController {
     @PostMapping(value = "/addpatch")
     public Result addpatch(Patch patch,@RequestParam("itemid") Integer itemid, HttpServletResponse response, HttpServletRequest request) {
         System.out.println(patch.toString());
-        if (!checklogin(response, request)) {
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }
         User users = (User) request.getSession().getAttribute("users");
@@ -61,7 +62,7 @@ public class patchController {
     //创建补丁
     @GetMapping(value = "/ceratepatch/{patchid}")
     public Result<PatchVO> ceratepatch( @PathVariable("patchid") Integer patchid, HttpServletResponse response, HttpServletRequest request)  {
-        if (!checklogin(response, request)) {
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }
         User users = (User) request.getSession().getAttribute("users");
@@ -71,7 +72,7 @@ public class patchController {
     //下载补丁
     @GetMapping(value = "/downloadpatch/{patchid}")
     public Result<String>   download(@PathVariable("patchid") Integer patchid,String path, HttpServletResponse response,HttpServletRequest request) throws IOException {
-        if (!checklogin(response, request)) {
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }
         User users = (User) request.getSession().getAttribute("users");
@@ -173,13 +174,13 @@ public class patchController {
         }
     }*/
 
-    public static Boolean checklogin(HttpServletResponse response, HttpServletRequest request) {
+   /* public static Boolean checklogin(HttpServletResponse response, HttpServletRequest request) {
         User users = (User) request.getSession().getAttribute("users");
         if (StringUtils.isEmpty(users)) {
             return false;
         } else {
             return true;
         }
-    }
+    }*/
 
 }

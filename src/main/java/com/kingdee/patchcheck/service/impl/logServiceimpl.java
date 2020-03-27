@@ -13,6 +13,8 @@ import com.kingdee.patchcheck.repository.itemanduserRepository;
 import com.kingdee.patchcheck.repository.patchLogRepository;
 import com.kingdee.patchcheck.service.IitemService;
 import com.kingdee.patchcheck.service.IlogService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -34,18 +36,23 @@ import java.util.Optional;
 @Service
 @Transactional
 public class logServiceimpl implements IlogService {
+    Logger Logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private patchLogRepository patchLogRepository;
 
     @Override
     public Page<patchLog> getpatchlog() {
+        Logger.info("获取日志实现类，入参 无");
         List<patchLog> patchLogList = patchLogRepository.findAll();
 
         PageRequest pageable = PageRequest.of(0, 10);
-        return new PageImpl<patchLog>(patchLogList, pageable, patchLogList.size() / 10 + 1);
+        PageImpl<patchLog> patchLog = new PageImpl<patchLog>(patchLogList, pageable, patchLogList.size() / 10 + 1);
+        Logger.info("获取日志实现类，出参 patchLog:{}",patchLog);
+        return patchLog;
     }
     @Override
     public Page<patchLog> getpatchlog(Integer page, Integer size) {
+        Logger.info("分页获取日志实现类，入参page:{},siaz:{}",page,size);
         if (null ==page){
             page = 0;
         }
@@ -53,6 +60,7 @@ public class logServiceimpl implements IlogService {
         //Page<User>  userList = userRepository.findAll(pageable);
 
         Page<patchLog> all = patchLogRepository.findAll(pageable);
+        Logger.info("分页获取日志实现类，出参 all:{}",all.toString());
         return all;
     }
 }

@@ -6,8 +6,11 @@ import com.kingdee.patchcheck.model.User;
 import com.kingdee.patchcheck.model.patchLog;
 import com.kingdee.patchcheck.service.IfileService;
 import com.kingdee.patchcheck.service.IlogService;
+import com.kingdee.patchcheck.utils.CheckUtil;
 import com.kingdee.patchcheck.utils.ResultUtil;
 import io.swagger.annotations.Api;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
@@ -29,42 +32,32 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/log")
 @Api(value = "测试swagger", description = "测试swagger api")
 public class logController {
+    Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private IlogService IlogService;
     @GetMapping(value = "/patchlog")
     public Result<Page> getpatchlog(HttpServletResponse response, HttpServletRequest request){
-        if (!checklogin(response, request)) {
+        logger.info("获取日志，入参 无");
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }
-        User users = (User) request.getSession().getAttribute("users");
         Page<patchLog> patchlog =  IlogService.getpatchlog();
-
+        logger.info("获取日志，出参 patchlog :{}",patchlog.toString());
         return ResultUtil.success(patchlog);
-        /*if(istion){
-            return ResultUtil.success(ifileService.fileUpload(file,name,pacthid,type,remarks,users,true));
-        }else{
-            return ResultUtil.success(ifileService.fileUpload(file,name,pacthid,type,remarks,users,false));
-        }*/
 
     }
-    //分页获取用户数据
+    //分页获取日志信息
     @GetMapping(value = "/getpatchlog/{page}/{size}")
     public Result<Page> getpatchlog(@PathVariable("page") int page, @PathVariable("size") int size, HttpServletResponse response, HttpServletRequest request) {
-        if (!checklogin(response, request)) {
+        logger.info("分页获取日志信息，入参page:{},size:{}",page,size);
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }
         page = page-1;
         Page<patchLog> getpatchLog = IlogService.getpatchlog(page, size);
+        logger.info("分页获取日志信息，出参getpatchLog：{} ",getpatchLog.toString());
         return ResultUtil.success(getpatchLog);
     }
 
-    public static Boolean checklogin(HttpServletResponse response, HttpServletRequest request) {
-        User users = (User) request.getSession().getAttribute("users");
-        if (StringUtils.isEmpty(users)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
 
 }

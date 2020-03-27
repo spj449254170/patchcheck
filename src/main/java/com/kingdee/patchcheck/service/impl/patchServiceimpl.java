@@ -6,6 +6,7 @@ import com.kingdee.patchcheck.model.*;
 import com.kingdee.patchcheck.repository.*;
 import com.kingdee.patchcheck.service.IpatchService;
 import com.kingdee.patchcheck.utils.FTPUtil;
+import com.kingdee.patchcheck.utils.ReadProperties;
 import com.kingdee.patchcheck.utils.ZipUtils;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +15,16 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.*;
-import java.net.URLEncoder;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.zip.ZipOutputStream;
 
 /**
  * description: userServiceimpl <br>
@@ -30,10 +33,11 @@ import java.util.zip.ZipOutputStream;
  * version: 1.0 <br>
  * 补丁处理实现类
  */
+
 @Service
 @Transactional
 public class patchServiceimpl implements IpatchService {
-
+    Logger logger = LoggerFactory.getLogger(patchServiceimpl.class);
     /* @Autowired
      private itemRepository itemRepository;
      @Autowired
@@ -50,8 +54,8 @@ public class patchServiceimpl implements IpatchService {
     private patchtypeRepository patchtypeRepository;
     @Autowired
     private patchLogRepository patchLogRepository;
-
-
+    @Autowired
+    private FtpProperties ftpProperties;
     @Override
     public Page<PatchVO> getpatch(Integer page, Integer size, Integer itemid) {
         if (null == page) {
@@ -108,9 +112,11 @@ public class patchServiceimpl implements IpatchService {
         6.存起来
         7.更新数据库
          */
+        logger.info("patchServiceimpl类的createpatch方法，参数{}",patchid,user);
         Optional<Patch> patch = patchRepository.findById(patchid);
         List<PatchEntry> patchEntryList = patchEntryRepository.findByPatchidAndIscloseAndIscheck(patchid, false, true);
-        File Files = new File("F:/patchcheck/" + UUID.randomUUID().toString());
+        File Files = new File(ftpProperties.getFile() + UUID.randomUUID().toString());
+        logger.info("patchServiceimpl类的createpatch方法，创建的文件夹file："+Files.getName());
         Map<String, String> map = new HashMap<String, String>();
 
         StringBuffer mas = new StringBuffer();
@@ -157,7 +163,7 @@ public class patchServiceimpl implements IpatchService {
             //压缩文件
             Date date = new Date();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-            File file = new File("F:/patchcheck/" +  simpleDateFormat.format(date) + ".zip");
+            File file = new File(ftpProperties.getFile() +  simpleDateFormat.format(date) + ".zip");
             FileOutputStream fos1 = new FileOutputStream(file);
             ZipUtils.toZip(Files.toString(), fos1, true);
             //把压缩包上传到文件服务器
@@ -165,7 +171,7 @@ public class patchServiceimpl implements IpatchService {
             //存入数据库
             Filemas filemas = new Filemas();
             //TODO 现在写死的，以后要改
-            filemas.setUrl("ftp://localhost/"+file.getName());
+            filemas.setUrl("ftp://"+ ReadProperties.getValue("ftp.properties", "host")+"/"+file.getName());
             filemas.setType("zip");
             filemas.setName(file.getName());
             Filemas optionalFilemas = filemsgRepository.save(filemas);
@@ -185,6 +191,15 @@ public class patchServiceimpl implements IpatchService {
         return true;
     }
 
+    /**
+     * 获取服务器ip
+     * @return
+     * @throws UnknownHostException
+     * @throws SocketException
+     */
+    public static String getLocalIP() throws UnknownHostException, SocketException {
+            return InetAddress.getLocalHost().getHostAddress();
+    }
 
     @Override
     public String downloadpatch(User user, Integer patchid, HttpServletResponse response) throws IOException {

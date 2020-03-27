@@ -5,6 +5,7 @@ import com.kingdee.patchcheck.model.*;
 import com.kingdee.patchcheck.service.IitemService;
 import com.kingdee.patchcheck.service.IpatchService;
 import com.kingdee.patchcheck.service.IpatchtypeService;
+import com.kingdee.patchcheck.utils.CheckUtil;
 import com.kingdee.patchcheck.utils.ResultUtil;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class patchtypeController {
     @PostMapping(value = "/addpatchtype")
     public Result addpatchtype(Patchtype patchtype, HttpServletResponse response, HttpServletRequest request) {
         System.out.println(patchtype.toString());
-        if (!checklogin(response, request)) {
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }
         User users = (User) request.getSession().getAttribute("users");
@@ -60,7 +61,7 @@ public class patchtypeController {
     //获取补丁类型列表
     @GetMapping(value = "/typelist")
     public Result<User> typelist(HttpServletResponse response, HttpServletRequest request) {
-        if (!checklogin(response, request)) {
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         } else {
 
@@ -70,7 +71,7 @@ public class patchtypeController {
     //删除补丁类型
     @GetMapping(value = "/deletepatchtype/{id}")
     public Result<User> deletepatchtype(@PathVariable("id") Integer id, HttpServletResponse response, HttpServletRequest request) {
-        if (!checklogin(response, request)) {
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }
         return ResultUtil.success(ipatchtypeService.deletepatchtype(id));
@@ -78,7 +79,7 @@ public class patchtypeController {
 
     }
     //修改补丁类型
-    @PostMapping(value = "/updatepatchtype")
+    /*@PostMapping(value = "/updatepatchtype")
     public Result updatepatchtype(Patchtype patchtype, HttpServletResponse response, HttpServletRequest request) {
         System.out.println(patchtype.toString());
         if (!checklogin(response, request)) {
@@ -87,7 +88,7 @@ public class patchtypeController {
         return ResultUtil.success(ipatchtypeService.updatepatchtype(patchtype));
 
 
-    }
+    }*/
     /*//修改用户
     @PostMapping(value = "/updateitem")
     public Result updateitem(Item item, HttpServletResponse response, HttpServletRequest request) {
@@ -165,13 +166,13 @@ public class patchtypeController {
         }
     }*/
 
-    public static Boolean checklogin(HttpServletResponse response, HttpServletRequest request) {
+    /*public static Boolean checklogin(HttpServletResponse response, HttpServletRequest request) {
         User users = (User) request.getSession().getAttribute("users");
         if (StringUtils.isEmpty(users)) {
             return false;
         } else {
             return true;
         }
-    }
+    }*/
 
 }

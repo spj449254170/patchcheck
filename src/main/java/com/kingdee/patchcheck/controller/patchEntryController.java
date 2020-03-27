@@ -6,6 +6,7 @@ import com.kingdee.patchcheck.model.*;
 import com.kingdee.patchcheck.service.IitemService;
 import com.kingdee.patchcheck.service.IpatchEntryService;
 import com.kingdee.patchcheck.service.IpatchService;
+import com.kingdee.patchcheck.utils.CheckUtil;
 import com.kingdee.patchcheck.utils.ResultUtil;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class patchEntryController {
     //分页获取补丁组件数据
     @GetMapping(value = "/getpatchentry/{page}/{size}/{patch}")
     public Result<PatchVO> getpatchentry(@PathVariable("page") int page, @PathVariable("size") int size, @PathVariable("patch") Integer patchid, HttpServletResponse response, HttpServletRequest request) {
-        if (!checklogin(response, request)) {
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }
         page = page-1;
@@ -48,7 +49,7 @@ public class patchEntryController {
     //获取补丁id
     @GetMapping(value = "/getpatchid/{patchentryid}")
     public Result<Item> getpatchid(@PathVariable("patchentryid") Integer patchentryid, HttpServletResponse response, HttpServletRequest request) {
-        if (!checklogin(response, request)) {
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }
 
@@ -56,7 +57,7 @@ public class patchEntryController {
     }
 
     //新增补丁
-    @PostMapping(value = "/addpatchentry")
+    /*@PostMapping(value = "/addpatchentry")
     public Result addpatchentry(PatchEntry patchEntry, @RequestParam("patchid") Integer patchid, HttpServletResponse response, HttpServletRequest request) {
         System.out.println(patchEntry.toString());
         if (!checklogin(response, request)) {
@@ -65,7 +66,7 @@ public class patchEntryController {
         User users = (User) request.getSession().getAttribute("users");
         return ResultUtil.success(ipatchEntryService.addpatchEntry(patchEntry,users,patchid));
 
-    }
+    }*/
    /* //修改用户
     @PostMapping(value = "/updateitem")
     public Result updateitem(Item item, HttpServletResponse response, HttpServletRequest request) {
@@ -81,7 +82,7 @@ public class patchEntryController {
     //删除补丁组件
     @GetMapping(value = "/deletepatchentry/{id}")
     public Result<User> deletepatchentry(@PathVariable("id") Integer id, HttpServletResponse response, HttpServletRequest request) {
-        if (!checklogin(response, request)) {
+        if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }
         User users = (User) request.getSession().getAttribute("users");
@@ -162,13 +163,13 @@ public class patchEntryController {
         }
     }*/
 
-    public static Boolean checklogin(HttpServletResponse response, HttpServletRequest request) {
+    /*public static Boolean checklogin(HttpServletResponse response, HttpServletRequest request) {
         User users = (User) request.getSession().getAttribute("users");
         if (StringUtils.isEmpty(users)) {
             return false;
         } else {
             return true;
         }
-    }
+    }*/
 
 }

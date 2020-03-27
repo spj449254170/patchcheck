@@ -19,13 +19,13 @@ public class FTPUtil {
     private static final Logger logger = LoggerFactory.getLogger(FTPUtil.class);
     //利用PropertiesUtil工具类来读取xml配置文件
 
-    private static String ftpIp="127.0.0.1";
+    private static String ftpIp=ReadProperties.getValue("ftp.properties", "host");
     /* = PropertiesUtil.getProperty("ftp.server.ip")*/
 
-    private static String ftpUser="root";
+    private static String ftpUser=ReadProperties.getValue("ftp.properties", "username");
     /* = PropertiesUtil.getProperty("ftp.user")*/
 
-    private static String ftpPass="root";
+    private static String ftpPass=ReadProperties.getValue("ftp.properties", "password");
     /*= PropertiesUtil.getProperty("ftp.pass");*/
 
     public FTPUtil(String ip, int port, String user, String pwd) {
@@ -37,7 +37,7 @@ public class FTPUtil {
 
     //对外开放的上传到ftp服务器的方法
     public static boolean uploadFile(List<File> fileList) throws IOException {
-        FTPUtil ftpUtil = new FTPUtil(ftpIp, 21, ftpUser, ftpUser);
+        FTPUtil ftpUtil = new FTPUtil(ftpIp, 21, ftpUser, ftpPass);
         logger.info("开始连接ftp服务器");
         boolean result = ftpUtil.uploadFile("img", fileList);
         logger.info("开始连接ftp服务器，结束上传，上传结果:{}", result);
