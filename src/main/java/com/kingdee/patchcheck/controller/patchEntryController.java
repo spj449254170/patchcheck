@@ -37,8 +37,8 @@ public class patchEntryController {
     private IpatchEntryService ipatchEntryService;
 
     //分页获取补丁组件数据
-    @GetMapping(value = "/getpatchentry/{page}/{size}/{patch}")
-    public Result<PatchVO> getpatchentry(@PathVariable("page") int page, @PathVariable("size") int size, @PathVariable("patch") Integer patchid, HttpServletResponse response, HttpServletRequest request) {
+    @GetMapping(value = "/getpatchentry")
+    public Result<PatchVO> getpatchentry(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam("patch") Integer patchid, HttpServletResponse response, HttpServletRequest request) {
         if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }

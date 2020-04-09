@@ -38,8 +38,8 @@ public class itemController {
     private IitemService itemservice;
 
     //分页获取项目数据
-    @GetMapping(value = "/getitme/{page}/{size}")
-    public Result<Item> admin(@PathVariable("page") int page, @PathVariable("size") int size, HttpServletResponse response, HttpServletRequest request) {
+    @GetMapping(value = "/getitme")
+    public Result<Item> admin(@RequestParam("page") int page, @RequestParam("size") int size, HttpServletResponse response, HttpServletRequest request) {
         logger.info("分页获取项目数据，入参page:{},size:{},response:{},request:{}",page,size,response,request);
         if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();

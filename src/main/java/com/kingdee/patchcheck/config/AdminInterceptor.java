@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AdminInterceptor implements HandlerInterceptor {
-    @Override
+/*    @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         System.out.println("执行了AdminInterceptor的preHandle方法");
         try {
@@ -17,7 +17,7 @@ public class AdminInterceptor implements HandlerInterceptor {
             if(user!=null){
                 return true;
             }
-            response.sendRedirect(request.getContextPath()+"/index.html#/");
+            response.sendRedirect(request.getContextPath()+"/static/index.jsp");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -25,5 +25,5 @@ public class AdminInterceptor implements HandlerInterceptor {
         //如果设置为false时，被请求时，拦截器执行到此处将不会继续操作
         //如果设置为true时，请求将会继续执行后面的操作
         return false;
-    }
+    }*/
 }

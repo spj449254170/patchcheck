@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>添加</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form" lay-filter="patchEntry">
+    <div class="layui-form-item">
+        <label class="layui-form-label required">补丁组件名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" id="name" lay-verify="required" lay-reqtext="补丁组件名称不能为空"
+                   placeholder="请输入补丁组件名称" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required">补丁组件描述</label>
+        <div class="layui-input-block">
+            <input type="textarea" name="remarks" id="remarks" placeholder="请输入补丁组件描述" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否打入补丁</label>
+        <div class="layui-input-block">
+            <input type="checkbox" id="delivery" name="delivery" lay-skin="switch" lay-filter="delivery">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required">补丁组件类型</label>
+        <div class="layui-input-block">
+            <select name="type" lay-filter="type" id="type" lay-filter="type"></select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">文件</label>
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn layui-btn-primary" id="upload"><i class="layui-icon"></i>上传文件
+            </button>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" id="save" lay-submit lay-filter="saveBtn">确认保存</button>
+        </div>
+    </div>
+</div>
+<script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../js/pagejs/patchEntryAdd.js"></script>
+<script>
+    $(function () {
+        patchEntryAdd.init()
+    })
+</script>
+</body>
+</html>

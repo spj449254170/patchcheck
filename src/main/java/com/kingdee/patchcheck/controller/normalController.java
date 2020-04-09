@@ -33,8 +33,8 @@ public class normalController {
     @Autowired
     private InormalitemService inormalitemService;
     //分页获取项目数据
-    @GetMapping(value = "/getitme/{page}/{size}")
-    public Result<User> getnormalitem(@PathVariable("page") int page, @PathVariable("size") int size, HttpServletResponse response, HttpServletRequest request) {
+    @GetMapping(value = "/getitme")
+    public Result<User> getnormalitem(@RequestParam("page") int page, @RequestParam("size") int size, HttpServletResponse response, HttpServletRequest request) {
         if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }

@@ -37,8 +37,8 @@ public class patchController {
     private IpatchService ipatchService;
 
     //分页获取补丁数据
-    @GetMapping(value = "/getpatch/{page}/{size}/{itemid}")
-    public Result<PatchVO> getpatch(@PathVariable("page") int page, @PathVariable("size") int size, @PathVariable("itemid") Integer itemid, HttpServletResponse response, HttpServletRequest request) {
+    @GetMapping(value = "/getpatch")
+    public Result<PatchVO> getpatch(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam("itemid") Integer itemid, HttpServletResponse response, HttpServletRequest request) {
         if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }

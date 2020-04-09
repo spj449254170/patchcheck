@@ -50,8 +50,8 @@ public class userController {
     }
 
     //分页获取用户数据
-    @GetMapping(value = "/getuser/{page}/{size}")
-    public Result<User> admin(@PathVariable("page") int page, @PathVariable("size") int size, HttpServletResponse response, HttpServletRequest request) {
+    @GetMapping(value = "/getuserPage")
+    public Result<User> admin(@RequestParam("page") int page, @RequestParam("size") int size, HttpServletResponse response, HttpServletRequest request) {
         if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
         }

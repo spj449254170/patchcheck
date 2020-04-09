@@ -47,8 +47,8 @@ public class logController {
 
     }
     //分页获取日志信息
-    @GetMapping(value = "/getpatchlog/{page}/{size}")
-    public Result<Page> getpatchlog(@PathVariable("page") int page, @PathVariable("size") int size, HttpServletResponse response, HttpServletRequest request) {
+    @GetMapping(value = "/getpatchlog")
+    public Result<Page> getpatchlog(@RequestParam("page") int page, @RequestParam("size") int size, HttpServletResponse response, HttpServletRequest request) {
         logger.info("分页获取日志信息，入参page:{},size:{}",page,size);
         if (!CheckUtil.checklogin(response, request)) {
             return ResultUtil.NOLOGIN();
