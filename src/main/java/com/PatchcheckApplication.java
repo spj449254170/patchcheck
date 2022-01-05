@@ -12,8 +12,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class PatchcheckApplication extends WebMvcConfigurerAdapter {
 
     public static void main(String[] args) {
+        System.out.println(12332);
         SpringApplication.run(PatchcheckApplication.class, args);
     }
+
+
+
+
 
     /*@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
